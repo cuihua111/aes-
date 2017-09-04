@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <title>Title</title>  
+  
+</head>  
+  
+<script src="./ces-aes.js"></script>  
+<script src="./Base64.js"></script>
+<body>  
+  
+ 
+<script>  
+  
+     
+  
+    var key = CryptoJS.enc.Utf8.parse("客户端秘钥");  
+  
+    var plaintText = '{"phone":"18244979393","password":"12312313","sms":"847105",}'; // 明文  
+  
+    var encryptedData = CryptoJS.AES.encrypt(plaintText, key, {  
+        mode: CryptoJS.mode.ECB,  
+        padding: CryptoJS.pad.Pkcs7  
+    });  
+  
+    console.log("加密前："+plaintText);  
+    console.log("加密后："+encryptedData);  
+  
+    // encryptedData = encryptedData.ciphertext.toString();
+      encryptedData = "25761A75BE278C2B61A0D55C04495EF562C96A294C8B0AFC8CA66DD209C6A42BD8BC85BC0AF8176C4319D2B92D8F736A16F72C00282DC95FACB50CFC7F0FF3F38CAD1FAF48FB3BA6B5DBC3E9F4F5B3881F4C30AA893B5C14812A92D92B466C4D7B682590CC009A1060358622027328FC3F3ED574C8426B646ABF4377A51C2954";
+    //经过base64编码的密文  
+    //   encryptedData = "MjU3NjFBNzVCRTI3OEMyQjYxQTBENTVDMDQ0OTVFRjU2MkM5NkEyOTRDOEIwQUZDOENBNjZERDIwOUM2QTQyQkQ4QkM4NUJDMEFGODE3NkM0MzE5RDJCOTJEOEY3MzZBMTZGNzJDMDAyODJEQzk1RkFDQjUwQ0ZDN0YwRkYzRjM4Q0FEMUZBRjQ4RkIzQkE2QjVEQkMzRTlGNEY1QjM4ODFGNEMzMEFBODkzQjVDMTQ4MTJBOTJEOTJCNDY2QzREN0I2ODI1OTBDQzAwOUExMDYwMzU4NjIyMDI3MzI4RkMzRjNFRDU3NEM4NDI2QjY0NkFCRjQzNzdBNTFDMjk1NA==";
+
+    //  var decodeBase64=Base64.decode(encryptedData)
+    var encryptedHexStr = CryptoJS.enc.Hex.parse(encryptedData);  
+    // var encryptedHexStr = CryptoJS.enc.Hex.parse(decodeBase64);  
+    var encryptedBase64Str = CryptoJS.enc.Base64.stringify(encryptedHexStr); 
+    console.log(encryptedBase64Str) 
+  
+    var decryptedData = CryptoJS.AES.decrypt(encryptedBase64Str, key, {  
+        mode: CryptoJS.mode.ECB,  
+        padding: CryptoJS.pad.Pkcs7  
+    });  
+  
+    var decryptedStr = decryptedData.toString(CryptoJS.enc.Utf8);  
+  
+    console.log("解密后:"+decryptedStr);  
+  
+      
+     var pwd = "服务端秘钥";  
+    //加密服务端返回的数据  
+    var decryptedData = CryptoJS.AES.decrypt(pwd, key, {  
+        mode: CryptoJS.mode.ECB,  
+        padding: CryptoJS.pad.Pkcs7  
+    });  
+      
+    console.log("解密服务端返回的数据:"+decryptedStr);  
+  
+</script>  
+</body>  
+</html>  
